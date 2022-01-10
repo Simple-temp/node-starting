@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1>starting node js</h1>
+        <ul>
+
+        </ul>
+    </div>
+    <div>
+        <h3>Show posted data : <span class="posteddata"></span></h3>
+        <input type="text" placeholder="add user" class="getValue">
+        <button class="submit">add user</button>
+    </div>
+
+    <script>
+        fetch(`http://localhost:4000/user`)
+        .then(res=>res.json())
+        .then(data=>{        
+            for(let i = 0; i<data.length; i++)
+            {
+                const user = data[i];
+                console.log(user)
+                // const ul = document.querySelector("ul");
+                const p = document.createElement("p");
+                // ul.appendChild(li);
+                p.innerHTML=user.name
+            }
+        })
+
+        
+        const submitBtn = document.querySelector(".submit");
+        submitBtn.addEventListener("click",()=>{
+            const name = document.querySelector(".getValue").value;
+            const user = {name}
+            console.log(name,user,"clicked")
+                
+            fetch(`http://localhost:4000/addUser`, {
+                method: 'POST',
+                body: JSON.stringify(user),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+            .then((response) => response.json())
+            .then((data) => postData(data));
+        })
+
+        function postData(user) 
+        {
+            document.querySelector(".posteddata").innerText = user.name;
+        }
+
+    </script>
+</body>
+</html>
